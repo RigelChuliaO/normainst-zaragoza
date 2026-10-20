@@ -1,0 +1,3 @@
+# Databricks Asset Bundle. Se completa en la fase 4 (tarea de CI/CD).
+bundle:
+  name: normainst-zaragoza
