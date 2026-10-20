@@ -1,0 +1,1 @@
+# Funciones disponibles en Free Edition
