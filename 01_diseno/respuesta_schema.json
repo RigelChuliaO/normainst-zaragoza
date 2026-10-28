@@ -1,0 +1,193 @@
+{
+  "$defs": {
+    "Abstencion": {
+      "additionalProperties": false,
+      "properties": {
+        "aplica": {
+          "title": "Aplica",
+          "type": "boolean"
+        },
+        "motivo": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Motivo"
+        },
+        "contexto_solicitado": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Contexto Solicitado"
+        }
+      },
+      "required": [
+        "aplica"
+      ],
+      "title": "Abstencion",
+      "type": "object"
+    },
+    "Cita": {
+      "additionalProperties": false,
+      "description": "Fuente que respalda la respuesta. Sale de los metadatos del chunk, no del LLM.",
+      "properties": {
+        "chunk_id": {
+          "description": "Identificador del chunk recuperado",
+          "minLength": 1,
+          "title": "Chunk Id",
+          "type": "string"
+        },
+        "norma": {
+          "description": "Nombre o código de la norma o trámite",
+          "minLength": 1,
+          "title": "Norma",
+          "type": "string"
+        },
+        "articulo_o_paso": {
+          "description": "Artículo, apartado o paso del trámite",
+          "minLength": 1,
+          "title": "Articulo O Paso",
+          "type": "string"
+        },
+        "nivel": {
+          "$ref": "#/$defs/Nivel"
+        },
+        "organo": {
+          "description": "Órgano que publica la norma o gestiona el trámite",
+          "minLength": 1,
+          "title": "Organo",
+          "type": "string"
+        },
+        "url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        },
+        "fecha_captura": {
+          "description": "Fecha en que se descargó el documento",
+          "format": "date",
+          "title": "Fecha Captura",
+          "type": "string"
+        }
+      },
+      "required": [
+        "chunk_id",
+        "norma",
+        "articulo_o_paso",
+        "nivel",
+        "organo",
+        "url",
+        "fecha_captura"
+      ],
+      "title": "Cita",
+      "type": "object"
+    },
+    "Nivel": {
+      "description": "Nivel normativo de una fuente.",
+      "enum": [
+        "Estado",
+        "Aragón",
+        "Zaragoza"
+      ],
+      "title": "Nivel",
+      "type": "string"
+    },
+    "TextoLiteral": {
+      "additionalProperties": false,
+      "description": "Cita textual de la norma, copiada del chunk sin cambios.",
+      "properties": {
+        "texto": {
+          "minLength": 1,
+          "title": "Texto",
+          "type": "string"
+        },
+        "fuente": {
+          "description": "Índice de la cita en la lista 'citas'",
+          "minimum": 0,
+          "title": "Fuente",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "texto",
+        "fuente"
+      ],
+      "title": "TextoLiteral",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Respuesta completa del asistente.",
+  "properties": {
+    "respuesta": {
+      "description": "Respuesta breve en lenguaje claro",
+      "minLength": 1,
+      "title": "Respuesta",
+      "type": "string"
+    },
+    "texto_literal": {
+      "items": {
+        "$ref": "#/$defs/TextoLiteral"
+      },
+      "title": "Texto Literal",
+      "type": "array"
+    },
+    "resumen": {
+      "default": "",
+      "description": "Explicación del modelo, marcada como resumen",
+      "title": "Resumen",
+      "type": "string"
+    },
+    "inferencias": {
+      "description": "Conclusiones que no están escritas literalmente en la fuente",
+      "items": {
+        "type": "string"
+      },
+      "title": "Inferencias",
+      "type": "array"
+    },
+    "citas": {
+      "items": {
+        "$ref": "#/$defs/Cita"
+      },
+      "title": "Citas",
+      "type": "array"
+    },
+    "niveles_consultados": {
+      "items": {
+        "$ref": "#/$defs/Nivel"
+      },
+      "title": "Niveles Consultados",
+      "type": "array"
+    },
+    "abstencion": {
+      "$ref": "#/$defs/Abstencion"
+    },
+    "avisos": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Avisos",
+      "type": "array"
+    }
+  },
+  "required": [
+    "respuesta",
+    "abstencion"
+  ],
+  "title": "Respuesta",
+  "type": "object"
+}
